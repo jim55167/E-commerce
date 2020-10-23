@@ -3,7 +3,7 @@
     <div class="text-right mt-4">
       <button
         class="btn btn-primary"
-        @click="openModal"
+        @click="openModal(true)"
       >
         建立新產品
       </button>
@@ -31,7 +31,8 @@
             <span>未啟用</span>
           </td>
           <td>
-            <button class="btn btn-outline-primary btn-sm">編輯</button>
+            <button class="btn btn-outline-primary btn-sm"
+             @click="openModal(false, item)">編輯</button>
           </td>
         </tr>
       </tbody>
@@ -178,6 +179,7 @@ export default {
     return {
       products: [], //新增的資料皆會儲存於此
       tempProduct: {},
+      isNew: false,
     };
   },
   methods: {
@@ -188,11 +190,35 @@ export default {
         this.products = response.data.products;
       });
     },
-    openModal() {
-        $('#productModal').modal('show')
+    openModal(isNew, item) {        
+        if (isNew) { //如果為新增的話，則是一個空物件
+          this.tempProduct = {};
+          this.isNew = true;
+        } else {
+          this.tempProduct = Object.assign({}, item); //ES6的寫法，可以將item寫入空物件，並且可避免tempProduct與item有參考的特性
+          this.isNew = false;
+        }
+        $('#productModal').modal('show'); //將這欄位往後放
     },
     updateProduct() {
-        
+      let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product`;
+      let httpMethod = 'post';
+      if (!this.isNew) { //判斷isNew是否為新，假設isNew不是新的
+        api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product/${this.tempProduct.id}`;
+        httpMethod = 'put';
+      }      
+      this.$http[ httpMethod ](api, { data: this.tempProduct }).then((response) => {
+        console.log(response.data);
+        if (response.data.success) {
+          $('#productModal').modal('hide'); //新增成功的話則關閉modal
+          this.getProducts(); //並且重新取得遠端內容
+        } else {
+          $('#productModal').modal('hide'); //若新增失敗會跳出錯誤訊息
+          this.getProducts();
+          console.log('新增失敗');
+        }
+        // this.products = response.data.products;
+      });
     }
   },
   created() {

@@ -33,6 +33,8 @@
           <td>
             <button class="btn btn-outline-primary btn-sm"
              @click="openModal(false, item)">編輯</button>
+             <button class="btn btn-outline-danger btn-sm"
+             @click="deleteModal(item)">刪除</button>
           </td>
         </tr>
       </tbody>
@@ -142,7 +144,7 @@
             <button type="button" class="btn btn-primary" @click="updateProduct">確認</button>
         </div>
         </div>
-    </div>
+      </div>
     </div>
     <div class="modal fade" id="delProductModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -161,8 +163,7 @@
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">取消</button>
-            <button type="button" class="btn btn-danger"
-            >確認刪除</button>
+            <button type="button" class="btn btn-danger" @click="deleteProduct">確認刪除</button>
         </div>
         </div>
     </div>
@@ -195,10 +196,14 @@ export default {
           this.tempProduct = {};
           this.isNew = true;
         } else {
-          this.tempProduct = Object.assign({}, item); //ES6的寫法，可以將item寫入空物件，並且可避免tempProduct與item有參考的特性
+          this.tempProduct = Object.assign({}, item); //Object.assign會將值寫到新的物件
           this.isNew = false;
         }
         $('#productModal').modal('show'); //將這欄位往後放
+    },
+    deleteModal(item) {
+      $('#delProductModal').modal('show');
+      this.tempProduct = item;
     },
     updateProduct() {
       let api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product`;
@@ -217,9 +222,17 @@ export default {
           this.getProducts();
           console.log('新增失敗');
         }
-        // this.products = response.data.products;
       });
-    }
+    },
+    deleteProduct() {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product${this.tempProduct.id}`
+      this.$http.delete(api, { data:this.tempProduct }).then((response) => {
+        if(response.data.success) {
+          $('#delProductModal').modal('hide');
+          this.getProducts();
+        }
+      });
+    },
   },
   created() {
     this.getProducts();

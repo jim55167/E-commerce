@@ -225,7 +225,7 @@ export default {
       });
     },
     deleteProduct() {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product${this.tempProduct.id}`;
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/product/${this.tempProduct.id}`;
       this.$http.delete(api, { data:this.tempProduct }).then((response) => {
         if(response.data.success) {
           $('#delProductModal').modal('hide');

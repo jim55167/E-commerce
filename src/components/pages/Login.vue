@@ -38,6 +38,10 @@ export default {
         this.$http.post(api, this.user).then((response) => {
         console.log(response.data);
         if(response.data.success){
+          const token = response.data.token;
+          const expired = response.data.expired;
+          console.log(token, expired);
+          document.cookie = `hexToken=${token};expires=${new Date(expired)};`;
             this.$router.push('/admin/products');
         }
       });

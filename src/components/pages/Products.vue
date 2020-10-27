@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :active.sync="isLoading"></loading>
     <div class="text-right mt-4">
       <button
         class="btn btn-primary"
@@ -40,7 +41,28 @@
       </tbody>
     </table>
 
-    <!-- Modal -->
+     <!-- bootstrap pagination -->
+    <nav aria-label="Page navigation example">
+      <ul class="pagination">
+        <li class="page-item" :class="{'disabled': !pagination.has_pre}">
+          <a class="page-link" href="#" aria-label="Previous"
+            @click.prevent="getProducts(pagination.current_page - 1)">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item" v-for="page in pagination.total_pages" :key="page"
+          :class="{'active': pagination.current_page === page}"> 
+        <a class="page-link" href="#" @click.prevent="getProducts(page)">{{ page }}</a></li>
+        <li class="page-item" :class="{'disabled': !pagination.has_next}">
+          <a class="page-link" href="#" aria-label="Next"
+            @click.prevent="getProducts(pagination.current_page + 1)">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Bootstrap edit Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -64,7 +86,7 @@
                 </div>
                 <div class="form-group">
                 <label for="customFile">或 上傳圖片
-                    <i class="fas fa-spinner fa-spin"></i>
+                    <i class="fas fa-spinner fa-spin" v-if="fileUploading"></i>
                 </label>
                 <input type="file" id="customFile" class="form-control"
                     ref="files" @change="uploadFile">
@@ -179,16 +201,22 @@ export default {
   data() {
     return {
       products: [], //新增的資料皆會儲存於此
+      pagination: {},
       tempProduct: {},
       isNew: false,
+      isLoading: false,
+      fileUploading: false,
     };
   },
   methods: {
-    getProducts() {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products`; //'https://vue-course-api.hexschool.io/api/jim55167/products'
+    getProducts(page = 1) {
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products?page=${page}`; //'https://vue-course-api.hexschool.io/api/jim55167/products'
+      this.isLoading = true;
       this.$http.get(api).then((response) => {
         console.log(response.data);
+        this.isLoading = false;
         this.products = response.data.products;
+        this.pagination = response.data.pagination;
       });
     },
     openModal(isNew, item) {        
@@ -239,6 +267,7 @@ export default {
       const formData = new FormData();
       formData.append('file-to-upload', uploadedFile);
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/upload`;
+      this.fileUploading = true;
       this.$http.post(url, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -247,12 +276,15 @@ export default {
         console.log(response.data);
         if(response.data.success) {
           this.$set(this.tempProduct, 'imageUrl', response.data.imageUrl);
+        } else {
+          this.$bus.$emit('message:push', response.data.message, 'danger');
         }
       })
     },
   },
   created() {
     this.getProducts();
+    
   },
 };
 </script>

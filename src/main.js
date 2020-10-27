@@ -3,12 +3,17 @@
 import Vue from 'vue';
 import axios from 'axios'; //主要AJAX套件
 import VueAxios from 'vue-axios'; //將它轉為Vue的套件
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap';
 
 // 上面為載入的套件內容，下面是自定義的內容
 
 import App from './App';
 import router from './router';
+import './bus';
+
+Vue.component('Loading', Loading);
 
 
 Vue.use(VueAxios, axios);

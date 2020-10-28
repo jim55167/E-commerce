@@ -12,7 +12,7 @@ import 'bootstrap';
 import App from './App';
 import router from './router';
 import './bus';
-import currencyFilter from './filters/currency';
+import currencyFilter from './filters/currency'; //千分號
 
 Vue.component('Loading', Loading);
 Vue.filter('currency',  currencyFilter);

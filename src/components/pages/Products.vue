@@ -29,7 +29,7 @@
           <td>
             <!-- 產品如果為啟用：is_enabled == 1 -->
             <span v-if="item.is_enabled" class="text-success">啟用</span>
-            <span v-if="!item.is_enabled">未啟用</span>
+            <span v-else class="text-danger">未啟用</span>
           </td>
           <td>
             <button class="btn btn-outline-primary btn-sm"

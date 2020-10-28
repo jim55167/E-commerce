@@ -25,9 +25,26 @@
       />
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Sign out</a>
+          <a class="nav-link" href="#" @click.prevent="signout">Sign out</a>
         </li>
       </ul>
     </nav>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'Navbar',
+  methods: {
+    signout() {
+      const url = `${process.env.APIPATH}/logout`; //登出的API路徑
+      this.$http.post(url).then((response) => {
+        console.log(response.data);
+        if (response.data.success) { //確認登出後就會將頁面轉換至signin頁面
+          this.$router.push('/signin');
+        }
+      });
+    }
+  }
+}
+</script>

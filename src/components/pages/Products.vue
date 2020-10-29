@@ -2,12 +2,7 @@
   <div>
     <loading :active.sync="isLoading"></loading>
     <div class="text-right mt-4">
-      <button
-        class="btn btn-primary"
-        @click="openModal(true)"
-      >
-        建立新產品
-      </button>
+      <button class="btn btn-primary" @click="openModal(true)"> 建立新產品 </button>
     </div>
     <table class="table mt-4">
       <thead>
@@ -33,34 +28,16 @@
           </td>
           <td>
             <button class="btn btn-outline-primary btn-sm"
-             @click="openModal(false, item)">編輯</button>
+              @click="openModal(false, item)">編輯</button>
              <button class="btn btn-outline-danger btn-sm"
-             @click="deleteModal(item)">刪除</button>
+              @click="deleteModal(item)">刪除</button>
           </td>
         </tr>
       </tbody>
     </table>
 
      <!-- bootstrap pagination -->
-    <nav aria-label="Page navigation example">
-      <ul class="pagination">
-        <li class="page-item" :class="{'disabled': !pagination.has_pre}">
-          <a class="page-link" href="#" aria-label="Previous"
-            @click.prevent="getProducts(pagination.current_page - 1)">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li class="page-item" v-for="page in pagination.total_pages" :key="page"
-          :class="{'active': pagination.current_page === page}"> 
-        <a class="page-link" href="#" @click.prevent="getProducts(page)">{{ page }}</a></li>
-        <li class="page-item" :class="{'disabled': !pagination.has_next}">
-          <a class="page-link" href="#" aria-label="Next"
-            @click.prevent="getProducts(pagination.current_page + 1)">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <Pagination :pages="pagination" @event="getProducts"></Pagination>
 
     <!-- Bootstrap edit Modal -->
     <div class="modal fade" id="productModal" tabindex="-1" role="dialog"
@@ -195,28 +172,34 @@
 
 <script>
 import $ from 'jquery';
+import Pagination from '../Pagination';
 
 export default {
   //功能是：可匯給其他的元件使用
   data() {
     return {
-      products: [], //新增的資料皆會儲存於此
+      products: [],   //新增的資料皆會儲存於此
       pagination: {},
-      tempProduct: {},
-      isNew: false,
-      isLoading: false,
-      fileUploading: false,
+      tempProduct: {},  //建立產品或修改產品時 用來存放產品
+      isNew: false,   //判斷是否為新建立來修改 tempProduct 的值
+      isLoading: false,  //判斷是否讀取中
+      fileUploading: false,   //判斷 font-awesome 的 icon 是否讀取中
     };
   },
   methods: {
     getProducts(page = 1) {
-      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/products?page=${page}`; //'https://vue-course-api.hexschool.io/api/jim55167/products'
+      const api = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/products?page=${page}`; //'https://vue-course-api.hexschool.io/api/jim55167/products'
       this.isLoading = true;
       this.$http.get(api).then((response) => {
         console.log(response.data);
         this.isLoading = false;
-        this.products = response.data.products;
-        this.pagination = response.data.pagination;
+        if (response.data.success){
+          this.products = response.data.products;
+          this.pagination = response.data.pagination;
+        } else {
+          this.$bus.$emit("message:push", response.data.message, "danger")
+        }
+        
       });
     },
     openModal(isNew, item) {        

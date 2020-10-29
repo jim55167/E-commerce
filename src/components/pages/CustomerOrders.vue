@@ -76,8 +76,8 @@
                 </div>
             </div>
         </div>
-         <div class="my-5 row justify-content-center">
-          <div class="my-5 row justify-content-center">
+         <div class="my-5 row justify-content-center" style="display: flex; margin:0 auto; ">
+          <div class="my-5 row justify-content-center" style="width:80%">
             <table class="table">
               <thead>
                 <th></th>
@@ -88,15 +88,16 @@
               <tbody>
                 <tr v-for="item in cart.carts" :key="item.id">
                   <td class="align-middle">
-                    <button type="button" class="btn btn-outline-danger btn-sm">
+                    <button type="button" class="btn btn-outline-danger btn-sm"
+                      @click="removeCartItem(item.id)">
                       <i class="far fa-trash-alt"></i>
                     </button>
                   </td>
                   <td class="align-middle">
                     {{ item.product.title }}
-                    <!-- <div class="text-success" v-if="item.coupon">
+                    <div class="text-success" v-if="item.coupon">
                       已套用優惠券
-                    </div> -->
+                    </div>
                   </td>
                   <td class="align-middle">{{ item.qty }}/{{ item.product.unit }}</td>
                   <td class="align-middle text-right">{{ item.final_total }}</td>
@@ -107,12 +108,20 @@
                   <td colspan="3" class="text-right">總計</td>
                   <td class="text-right">{{ cart.total }}</td>
                 </tr>
-                <!-- <tr v-if="cart.final_total">
+                <tr v-if="cart.final_total !== cart.total">
                   <td colspan="3" class="text-right text-success">折扣價</td>
                   <td class="text-right text-success">{{ cart.final_total }}</td>
-                </tr> -->
+                </tr>
               </tfoot>
             </table>
+            <div class="input-group mb-3 input-group-sm">
+              <input type="text" class="form-control" v-model="coupon_code" placeholder="請輸入優惠碼">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" @click="addCouponCode">
+                  套用優惠碼
+                </button>
+              </div>
+            </div>
           </div>
         </div>
     </div>
@@ -129,6 +138,7 @@ export default {
       loadingItem: '',
       cart: {},
       isLoading: false,
+      coupon_code: '',
     };
   },
   methods: {
@@ -169,9 +179,28 @@ export default {
       const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart`;
       this.isloading = true;
       this.$http.get(url).then((response) => {
-        // this.product = response.data.product;
         this.cart = response.data.data;
         console.log(response);  
+         this.isloading = false;
+      });
+    },
+    removeCartItem(id) {
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/cart/${id}`;
+      this.isloading = true;
+      this.$http.delete(url).then((response) => {
+        this.getCart();  
+         this.isloading = false;
+      });
+    },
+    addCouponCode() {
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/coupon`;
+      const coupon = {
+        code: this.coupon_code,
+      }
+      this.isloading = true;
+      this.$http.post(url, { data: coupon }).then((response) => {
+        console.log(response);
+        this.getCart();  
          this.isloading = false;
       });
     }

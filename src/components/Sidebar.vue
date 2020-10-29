@@ -7,19 +7,19 @@
               <ul class="nav flex-column">
                 <li class="nav-item">
                     <router-link class="nav-link" href="#" to="/admin/products">
-                    <span data-feather="home"></span>
+                    <span data-feather="home"><i class="fas fa-box-open"></i></span>
                     產品列表 <span class="sr-only">(current)</span>
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link class="nav-link" href="#" to="/admin/orders">
-                    <span data-feather="file"></span>
+                    <span data-feather="file"><i class="far fa-list-alt"></i></span>
                     訂單列表
                     </router-link>
                 </li>
                 <li class="nav-item">
                     <router-link class="nav-link" href="#" to="/admin/coupons">
-                    <span data-feather="shopping-cart"></span>
+                    <span data-feather="shopping-cart"><i class="fas fa-ticket-alt"></i></span>
                     優惠卷
                     </router-link>
                 </li>
@@ -33,7 +33,7 @@
               <ul class="nav flex-column mb-2">
                 <li class="nav-item">
                   <router-link class="nav-link" href="#" to="/customer_order">
-                    <span data-feather="file-text"></span>
+                    <span data-feather="file-text"><i class="fas fa-shopping-cart"></i></span>
                     模擬訂單
                   </router-link>
                 </li>

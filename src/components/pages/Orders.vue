@@ -24,21 +24,20 @@
               </li>
             </ul>
           </td>
-          <td>{{ item.total | currency }}</td>
+          <td class="text-right">{{ item.total | currency }}</td>
           <td>
             <strong v-if="item.is_paid" class="text-success">已付款</strong>
-            <span v-else class="text-muted">尚未付款</span>
+            <span v-else class="text-muted">尚未起用</span>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <Pagination v-bind:childPaginations="pagination" @changeCurrentPage="getOrders"></Pagination>
+    <Pagination :pages="pagination" @event="getOrders"></Pagination>
   </div>
 </template>
 
 <script>
-import $ from "jquery";
 import Pagination from '../Pagination';
 export default {
   data() {
@@ -54,7 +53,7 @@ export default {
   },
   methods: {
     getOrders(currentPage = 1) {
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/orders?page=${currentPage}`;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/orders?page=${currentPage}`;
       this.isLoading = true;
       this.$http.get(url, this.tempProduct).then((response) => {
         this.orders = response.data.orders;

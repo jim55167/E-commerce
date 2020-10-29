@@ -13,9 +13,11 @@ import App from './App';
 import router from './router';
 import './bus';
 import currencyFilter from './filters/currency'; //千分號
+import dateFilter from './filters/date';
 
 Vue.component('Loading', Loading);
 Vue.filter('currency',  currencyFilter);
+Vue.filter('date', dateFilter);
 
 Vue.use(VueAxios, axios);
 Vue.config.productionTip = false;

@@ -125,8 +125,8 @@
           </div>
         </div>
 
-        <!-- <div class="my-5 row justify-content-center">
-        <form class="col-md-6">
+        <div class="my-5 row justify-content-center">
+        <form class="col-md-6" @submit.prevent="createOrder">
           <div class="form-group">
             <label for="useremail">Email</label>
             <input type="email" class="form-control" name="email" id="useremail"
@@ -137,8 +137,8 @@
           <div class="form-group">
             <label for="username">收件人姓名</label>
             <input type="text" class="form-control" name="name" id="username"
-              v-model="form.user.name" placeholder="輸入姓名">
-            <span class="text-danger"></span>
+              v-model="form.user.name" v-validate="required" placeholder="輸入姓名">
+            <span class="text-danger">{{ errors.has('name') }}</span>
           </div>
         
           <div class="form-group">
@@ -161,7 +161,7 @@
             <button class="btn btn-danger">送出訂單</button>
           </div>
         </form>
-      </div> -->
+      </div>
     </div>
 </template>
 
@@ -177,6 +177,15 @@ export default {
       cart: {},
       isLoading: false,
       coupon_code: '',
+      form: {
+        user: {
+          name: '',
+          email: '',
+          tel: '',
+          address: '',
+        },
+        message: '',
+      },
     };
   },
   methods: {
@@ -239,6 +248,15 @@ export default {
       this.$http.post(url, { data: coupon }).then((response) => {
         console.log(response);
         this.getCart();  
+         this.isloading = false;
+      });
+    },
+    createOrder() {
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/order`;
+      const order = this.form;
+      this.isloading = true;
+      this.$http.post(url, { data: order }).then((response) => {
+        console.log('訂單已建立', response);
          this.isloading = false;
       });
     }

@@ -7,6 +7,11 @@ import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap';
 
+//驗證訊息相關套件
+import VeeValidate from "vee-validate";
+import VueI18n from 'vue-i18n';
+import zhTW from '../node_modules/vee-validate/dist/locale/zh_TW'
+
 // 上面為載入的套件內容，下面是自定義的內容
 
 import App from './App';
@@ -15,16 +20,29 @@ import './bus';
 import currencyFilter from './filters/currency'; //千分號
 import dateFilter from './filters/date';
 
+
 Vue.component('Loading', Loading);
 Vue.filter('currency',  currencyFilter);
 Vue.filter('date', dateFilter);
 
 Vue.use(VueAxios, axios);
+Vue.use(VueI18n);
 Vue.config.productionTip = false;
 axios.defaults.withCredentials = true;
 
+const i18n = new VueI18n({
+  locale: 'zhTW'
+});
+Vue.use(VeeValidate, {
+  i18n,
+  dictionary: {
+    zhTW
+  }
+});
+
 /* eslint-disable no-new */
 new Vue({
+  i18n,
   el: '#app',
   router,
   components: { App },

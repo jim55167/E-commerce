@@ -19,8 +19,8 @@
         <tr v-for="(item, key) in products" :key="key">
           <td>{{ item.category }}</td>
           <td>{{ item.title }}</td>
-          <td class="text-right">{{ item.origin_price | currency }}</td>
-          <td class="text-right">{{ item.price | currency }}</td>
+          <td class="text-left">{{ item.origin_price | currency }}</td>
+          <td class="text-left">{{ item.price | currency }}</td>
           <td>
             <!-- 產品如果為啟用：is_enabled == 1 -->
             <span v-if="item.is_enabled" class="text-success">啟用</span>
@@ -185,6 +185,9 @@ export default {
       isLoading: false,  //判斷是否讀取中
       fileUploading: false,   //判斷 font-awesome 的 icon 是否讀取中
     };
+  },
+  components: {
+    Pagination,
   },
   methods: {
     getProducts(page = 1) {

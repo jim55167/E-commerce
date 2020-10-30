@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div style="display:flex">
     <!-- bootstrap pagination -->
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" style="margin:0 auto">
             <ul class="pagination">
                 <li class="page-item" :class="{ 'disabled': !pages.has_pre }">
                     <a class="page-link" href="#" aria-label="Previous"

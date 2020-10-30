@@ -5,7 +5,7 @@ import VueRouter from 'vue-router';
 import Dashboard from '@/components/Dashboard';
 import Login from '@/components/pages/Login';
 import Products from '@/components/pages/Products';
-import Coupons from '@/components/pages/Coupons'
+import Coupons from '@/components/pages/Coupons';
 import Orders from '@/components/pages/Orders';
 import CustomerOrder from '@/components/pages/CustomerOrders';
 

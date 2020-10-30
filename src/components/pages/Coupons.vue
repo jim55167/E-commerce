@@ -84,10 +84,13 @@
         </div>
       </div>
     </div>
+
+    <Pagination :pages="pagination" @event="getCoupons"></Pagination>
   </div>
 </template>
 
 <script>
+import Pagination from '../Pagination';
 import $ from 'jquery';
 export default {
   props: {
@@ -106,7 +109,11 @@ export default {
       due_date: new Date(),
       isNew: false,
       isLoading: false,
+      pagination: {},
     };
+  },
+  components: {
+    Pagination,
   },
   watch: {
     due_date() {
@@ -127,10 +134,12 @@ export default {
         this.due_date = dateAndTime[0];
       }
     },
-    getCoupons() {
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/coupons`;
-      this.$http.get(url, this.tempProduct).then((response) => {
+    getCoupons(currentPage = 1) {
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/coupons?page=${currentPage}`;
+      this.isLoading = true;
+      this.$http.get(url).then((response) => {
         this.coupons = response.data.coupons;
+        this.pagination = response.data.pagination;
         console.log(response);
         this.isLoading = false;
       });

@@ -90,8 +90,9 @@
 </template>
 
 <script>
-import Pagination from '../Pagination';
+
 import $ from 'jquery';
+import Pagination from '../Pagination';
 export default {
   props: {
     config: Object,

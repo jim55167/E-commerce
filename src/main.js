@@ -9,7 +9,7 @@ import 'bootstrap';
 
 //驗證訊息相關套件
 import VeeValidate from 'vee-validate';
-import zhTW from '../node_modules/vee-validate/dist/locale/zh_TW';
+import zhTW from 'vee-validate/dist/locale/zh_TW';
 import VueI18n from 'vue-i18n';
 
 // 上面為載入的套件內容，下面是自定義的內容

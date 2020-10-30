@@ -27,7 +27,7 @@
           <td class="text-right">{{ item.total | currency }}</td>
           <td>
             <strong v-if="item.is_paid" class="text-success">已付款</strong>
-            <span v-else class="text-muted">尚未起用</span>
+            <span v-else class="text-muted">尚未付款</span>
           </td>
         </tr>
       </tbody>

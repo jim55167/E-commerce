@@ -130,15 +130,19 @@
           <div class="form-group">
             <label for="useremail">Email</label>
             <input type="email" class="form-control" name="email" id="useremail"
+              v-validate="'required|email'"
               v-model="form.user.email" placeholder="請輸入 Email" required>
-            <span class="text-danger"></span>
+            <span class="text-danger" v-if="errors.has('email')">
+              {{errors.first('email')}}
+            </span>
           </div>
         
           <div class="form-group">
             <label for="username">收件人姓名</label>
             <input type="text" class="form-control" name="name" id="username"
-              v-model="form.user.name" v-validate="required" placeholder="輸入姓名">
-            <span class="text-danger">{{ errors.has('name') }}</span>
+              :class="{'is-invalid': errors.has('name')}"
+              v-model="form.user.name" v-validate="'required'" placeholder="輸入姓名">
+            <span class="text-danger" v-if="errors.has('name')">請輸入姓名</span>
           </div>
         
           <div class="form-group">
@@ -257,6 +261,9 @@ export default {
       this.isloading = true;
       this.$http.post(url, { data: order }).then((response) => {
         console.log('訂單已建立', response);
+        if (response.data.success) {
+          this.$router.push(`/customer_checkout/${response.data.orderId}`);
+        }
          this.isloading = false;
       });
     }

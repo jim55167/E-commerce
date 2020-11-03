@@ -1,21 +1,9 @@
-# vuewebpack
+# NPM套件
 
-> A Vue.js project
+<https://github.com/ankurk91/vue-loading-overlay>
 
-## Build Setup
+<https://www.npmjs.com/package/vue-axios>
 
-``` bash
-# install dependencies
-npm install
+<https://getbootstrap.com/docs/4.5/getting-started/download/>
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+<https://getbootstrap.com/docs/4.5/components/pagination/>  ←Pagination

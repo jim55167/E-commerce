@@ -23,12 +23,6 @@ export default new VueRouter({
             path: '*',
             redirect: 'login',
         },
-        // {
-        //     name: 'HelloWorld',
-        //     path: '/',
-        //     component: HelloWorld,
-        //     meta: { requiresAuth: true }, //路由訊息
-        // },
         {
             name: 'Login',//對應的虛擬路徑
             path: '/login',//元件呈現的名稱

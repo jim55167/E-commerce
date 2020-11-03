@@ -8,9 +8,25 @@ import 'vue-loading-overlay/dist/vue-loading.css';
 import 'bootstrap';
 
 //驗證訊息相關套件
-import VeeValidate from 'vee-validate';
-import zhTW from 'vee-validate/dist/locale/zh_TW';
-import VueI18n from 'vue-i18n';
+import { ValidationObserver, ValidationProvider, extend, localize, configure } from 'vee-validate';
+import TW from 'vee-validate/dist/locale/zh_TW.json';
+import * as rules from 'vee-validate/dist/rules';
+
+Object.keys(rules).forEach((rule) => {
+  extend(rule, rules[rule]);
+});
+
+localize('zh_TW', TW);
+
+Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('ValidationProvider', ValidationProvider);
+
+configure({
+  classes: {
+    valid: 'is-valid',
+    invalid: 'is-invalid',
+  }
+});
 
 // 上面為載入的套件內容，下面是自定義的內容
 
@@ -26,24 +42,13 @@ Vue.filter('currency',  currencyFilter);
 Vue.filter('date', dateFilter);
 
 Vue.use(VueAxios, axios);
-Vue.use(VueI18n);
 Vue.config.productionTip = false;
 axios.defaults.withCredentials = true;
 
-const i18n = new VueI18n({
-  locale: 'zhTW',
-});
-Vue.use(VeeValidate, {
-  events: 'input|blur', 
-  i18n,
-  dictionary: {
-    zhTW
-  }
-});
+
 
 /* eslint-disable no-new */
 new Vue({
-  i18n,
   el: '#app',
   router,
   components: { App },
@@ -51,8 +56,7 @@ new Vue({
 });
 
 router.beforeEach((to, from, next) => {
-  console.log('to', to, 'from', from, 'next', next);
-
+  // console.log('to', to, 'from', from, 'next', next);
   if (to.meta.requiresAuth) { //假如meta具有requiresAuth的話則不會直接放行
     const api = `${process.env.APIPATH}/api/user/check`;
     axios.post(api).then((response) => { //因目前執行環境是在router下，並不是在vue的元件內，所以他無法直接呼叫this.$http，因此直接替換成axios

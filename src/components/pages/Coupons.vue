@@ -136,7 +136,7 @@ export default {
       }
     },
     getCoupons(currentPage = 1) {
-      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/coupons?page=${currentPage}`;
+      const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupons?page=${currentPage}`;
       this.isLoading = true;
       this.$http.get(url).then((response) => {
         this.coupons = response.data.coupons;
@@ -147,7 +147,7 @@ export default {
     },
     updateCoupon() {
       if (this.isNew) {
-        const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/coupon`;
+        const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon`;
         this.$http.post(url, { data: this.tempCoupon }).then((response) => {
           console.log(response, this.tempCoupon);
           $('#couponModal').modal('hide');
@@ -155,7 +155,7 @@ export default {
           this.isLoading = false;
         });
       } else {
-        const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPTH}/admin/coupon/${this.tempCoupon.id}`;
+        const url = `${process.env.APIPATH}/api/${process.env.CUSTOMPATH}/admin/coupon/${this.tempCoupon.id}`;
         this.due_date = new Date(this.tempCoupon.due_date * 1000);
         this.$http.put(url, { data: this.tempCoupon }).then((response) => {
           console.log(response);

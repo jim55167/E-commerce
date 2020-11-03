@@ -12,7 +12,7 @@
           <th width="120">原價</th>
           <th width="120">售價</th>
           <th width="100">是否啟用</th>
-          <th width="80">編輯</th>
+          <th width="120">編輯</th>
         </tr>
       </thead>
       <tbody>
@@ -201,19 +201,18 @@ export default {
           this.pagination = response.data.pagination;
         } else {
           this.$bus.$emit("message:push", response.data.message, "danger")
-        }
-        
+        }        
       });
     },
-    openModal(isNew, item) {        
-        if (isNew) { //如果為新增的話，則是一個空物件
+    openModal(isNew, item) {   //新增、編輯視窗
+        if (isNew) { //如果為新增的話，則給一個空物件
           this.tempProduct = {};
           this.isNew = true;
         } else {
           this.tempProduct = Object.assign({}, item); //Object.assign會將值寫到新的物件
           this.isNew = false;
         }
-        $('#productModal').modal('show'); //將這欄位往後放
+        $('#productModal').modal('show');
     },
     deleteModal(item) {
       $('#delProductModal').modal('show');
@@ -270,8 +269,7 @@ export default {
     },
   },
   created() {
-    this.getProducts();
-    
+    this.getProducts();  
   },
 };
 </script>
